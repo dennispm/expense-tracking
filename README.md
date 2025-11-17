@@ -103,6 +103,7 @@ The application uses H2 in-memory database by default. The database console is a
 
 To use a different database, update the configuration in `application.properties`.
 
+
 ## License
 
 This project is licensed under the MIT License.
