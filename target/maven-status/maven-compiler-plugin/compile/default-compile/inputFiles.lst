@@ -1,0 +1,14 @@
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/security/SecurityConfig.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/model/Expense.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/service/UserService.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/service/ExpenseService.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/model/User.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/repository/UserRepository.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/util/DataInitializer.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/controller/DashboardController.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/controller/ExpenseController.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/security/UserDetailsServiceImpl.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/repository/ExpenseRepository.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/ExpenseTrackerApplication.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/util/CsvExportService.java
+/Users/dennis.mathew/github/expense-tracker/src/main/java/com/example/expensetracker/controller/UserController.java

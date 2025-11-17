@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Expenses - Expense Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>My Expenses</h2>
+            <a th:href="@{/expenses/add}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add New Expense
+            </a>
+        </div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Amount</th>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Sub Category</th>
+                                <th>Location</th>
+                                <th>Payment Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${expenses.empty}">
+                                <td colspan="7" class="text-center">No expenses found</td>
+                            </tr>
+                            <tr th:each="expense : ${expenses}">
+                                <td th:text="${expense.name}">Groceries</td>
+                                <td th:text="${'$' + #numbers.formatDecimal(expense.amount, 1, 2)}">$0.00</td>
+                                <td th:text="${#temporals.format(expense.date, 'MM/dd/yyyy')}">01/01/2025</td>
+                                <td th:text="${expense.category}">Food</td>
+                                <td th:text="${expense.subCategory}">Groceries</td>
+                                <td th:text="${expense.location}">Supermarket</td>
+                                <td th:text="${expense.cardUsed}">Visa</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-4">
+            <a th:href="@{/expenses/search}" class="btn btn-outline-primary">
+                <i class="bi bi-search"></i> Search Expenses
+            </a>
+            <a th:href="@{/dashboard}" class="btn btn-outline-secondary">
+                <i class="bi bi-graph-up"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

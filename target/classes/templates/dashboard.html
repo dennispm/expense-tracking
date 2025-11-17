@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div th:replace="~{fragments/header :: header}"></div>
+    
+    <div class="container mt-4">
+        <h2>Expense Dashboard</h2>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Total Expenses</h5>
+                    </div>
+                    <div class="card-body">
+                        <h3 th:text="${'$' + #numbers.formatDecimal(totalExpenses, 1, 2)}">$0.00</h3>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Year Selection</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/dashboard/year}" method="get">
+                            <div class="input-group">
+                                <select name="year" class="form-select">
+                                    <option th:selected="${currentYear == 2023}" value="2023">2023</option>
+                                    <option th:selected="${currentYear == 2024}" value="2024">2024</option>
+                                    <option th:selected="${currentYear == 2025}" value="2025">2025</option>
+                                </select>
+                                <button type="submit" class="btn btn-primary">View</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Expenses by Category</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="categoryChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Monthly Expenses</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="monthlyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Expenses by Payment Method</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="cardChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Quick Actions</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-grid gap-2">
+                            <a th:href="@{/expenses/add}" class="btn btn-primary">Add New Expense</a>
+                            <a th:href="@{/expenses/search}" class="btn btn-secondary">Search Expenses</a>
+                            <a th:href="@{/expenses}" class="btn btn-info">View All Expenses</a>
+                            <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/users}" class="btn btn-warning">Manage Users</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script th:inline="javascript">
+        // Category Chart
+        const categoryData = /*[[${categoryExpenses}]]*/ {};
+        const categoryLabels = Object.keys(categoryData);
+        const categoryValues = Object.values(categoryData);
+        
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'pie',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+        
+        // Monthly Chart
+        const monthlyData = /*[[${monthlyExpenses}]]*/ {};
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const monthlyValues = Array(12).fill(0);
+        
+        Object.entries(monthlyData).forEach(([month, value]) => {
+            monthlyValues[parseInt(month) - 1] = value;
+        });
+        
+        new Chart(document.getElementById('monthlyChart'), {
+            type: 'bar',
+            data: {
+                labels: months,
+                datasets: [{
+                    label: 'Monthly Expenses',
+                    data: monthlyValues,
+                    backgroundColor: '#36A2EB'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+        
+        // Card Chart
+        const cardData = /*[[${cardExpenses}]]*/ {};
+        const cardLabels = Object.keys(cardData);
+        const cardValues = Object.values(cardData);
+        
+        new Chart(document.getElementById('cardChart'), {
+            type: 'doughnut',
+            data: {
+                labels: cardLabels,
+                datasets: [{
+                    data: cardValues,
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
